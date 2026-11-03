@@ -1,0 +1,1361 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escola Control</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f4f8;
+    color: #172334;
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #10243d;
+    color: white;
+    padding: 25px 15px;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 35px;
+}
+
+.logo span {
+    display: block;
+    font-size: 11px;
+    color: #a9bfd5;
+    margin-top: 5px;
+}
+
+.menu button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 7px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.menu button:hover,
+.menu button.active {
+    background: #234566;
+}
+
+main {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    background: white;
+    padding: 22px 30px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+}
+
+.content {
+    padding: 30px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #718096;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e4eaf1;
+    box-shadow: 0 4px 12px #00000008;
+}
+
+.card small {
+    color: #718096;
+}
+
+.card h2 {
+    margin-top: 12px;
+    font-size: 28px;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e4eaf1;
+}
+
+button {
+    cursor: pointer;
+}
+
+.btn {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin: 3px;
+}
+
+.primary {
+    background: #2563eb;
+    color: white;
+}
+
+.secondary {
+    background: #e9eef5;
+    color: #26384d;
+}
+
+.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.btn:hover {
+    opacity: .85;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d8e0e9;
+    border-radius: 8px;
+    outline: none;
+    background: white;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #2563eb;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #e8edf2;
+    font-size: 13px;
+}
+
+th {
+    background: #f6f8fb;
+    color: #66758a;
+}
+
+.table-container {
+    overflow-x: auto;
+    background: white;
+    border-radius: 10px;
+}
+
+.badge {
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.disponivel {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.emuso {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.manutencao {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.actions {
+    display: flex;
+    gap: 5px;
+}
+
+.actions button {
+    padding: 7px;
+    border: none;
+    border-radius: 5px;
+}
+
+.empty {
+    padding: 30px;
+    text-align: center;
+    color: #718096;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.toolbar input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.toolbar select {
+    width: auto;
+    min-width: 150px;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #10243d;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: none;
+    z-index: 100;
+}
+
+.toast.show {
+    display: block;
+}
+
+.recent-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+
+@media(max-width: 850px) {
+    .app {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .menu button {
+        width: auto;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .content {
+        padding: 18px;
+    }
+}
+
+@media(max-width: 550px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .topbar {
+        padding: 17px;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .card {
+        padding: 13px;
+    }
+
+    .card h2 {
+        font-size: 23px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="logo">
+        ▦ ESCOLA CONTROL
+        <span>Gestão de equipamentos</span>
+    </div>
+
+    <nav class="menu">
+        <button class="active" data-page="dashboard">▤ Visão geral</button>
+        <button data-page="inventory">▦ Equipamentos</button>
+        <button data-page="register">＋ Cadastrar equipamento</button>
+        <button data-page="settings">⚙ Dados e backup</button>
+    </nav>
+
+</aside>
+
+<main>
+
+<header class="topbar">
+    <strong>Gestão escolar</strong>
+    <span>Escola Control</span>
+</header>
+
+<div class="content">
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+    <h1>Visão geral</h1>
+    <p class="subtitle">
+        Acompanhe os equipamentos cadastrados na escola.
+    </p>
+
+    <div class="stats">
+
+        <div class="card">
+            <small>Total de equipamentos</small>
+            <h2 id="total">0</h2>
+        </div>
+
+        <div class="card">
+            <small>Disponíveis</small>
+            <h2 id="available">0</h2>
+        </div>
+
+        <div class="card">
+            <small>Em uso</small>
+            <h2 id="inUse">0</h2>
+        </div>
+
+        <div class="card">
+            <small>Em manutenção</small>
+            <h2 id="maintenance">0</h2>
+        </div>
+
+    </div>
+
+    <div class="panel">
+        <h3>Ações rápidas</h3>
+        <br>
+
+        <button class="btn primary" data-go="register">
+            + Cadastrar equipamento
+        </button>
+
+        <button class="btn secondary" data-go="inventory">
+            Ver inventário
+        </button>
+
+        <button class="btn secondary" id="quickExport">
+            Exportar CSV
+        </button>
+    </div>
+
+    <div class="panel">
+        <h3>Cadastros recentes</h3>
+        <br>
+        <div id="recent"></div>
+    </div>
+
+</section>
+
+<!-- INVENTÁRIO -->
+
+<section id="inventory" class="page">
+
+    <h1>Equipamentos</h1>
+    <p class="subtitle">
+        Consulte e gerencie os equipamentos cadastrados.
+    </p>
+
+    <div class="toolbar">
+
+        <input
+            id="search"
+            placeholder="Pesquisar equipamento..."
+        >
+
+        <select id="filterCategory">
+            <option value="">Todas as categorias</option>
+            <option>Computador</option>
+            <option>Notebook</option>
+            <option>Projetor</option>
+            <option>Teclado</option>
+            <option>Mouse</option>
+            <option>Impressora</option>
+            <option>Monitor</option>
+            <option>Outro</option>
+        </select>
+
+        <select id="filterStatus">
+            <option value="">Todas as situações</option>
+            <option>Disponível</option>
+            <option>Em uso</option>
+            <option>Em manutenção</option>
+        </select>
+
+        <button class="btn secondary" id="clearFilters">
+            Limpar
+        </button>
+
+    </div>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Equipamento</th>
+                    <th>Patrimônio</th>
+                    <th>Categoria</th>
+                    <th>Localização</th>
+                    <th>Situação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody id="equipmentList"></tbody>
+
+        </table>
+
+        <div id="emptyInventory" class="empty">
+            Nenhum equipamento cadastrado.
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CADASTRO -->
+
+<section id="register" class="page">
+
+    <h1 id="formTitle">Cadastrar equipamento</h1>
+
+    <p class="subtitle">
+        Preencha os dados do equipamento.
+    </p>
+
+    <div class="panel">
+
+        <form id="equipmentForm">
+
+            <input type="hidden" id="editId">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Nome do equipamento *</label>
+                    <input
+                        id="name"
+                        required
+                        maxlength="70"
+                        placeholder="Ex.: Computador sala 01"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Categoria *</label>
+
+                    <select id="category" required>
+                        <option value="">Selecione</option>
+                        <option>Computador</option>
+                        <option>Notebook</option>
+                        <option>Projetor</option>
+                        <option>Teclado</option>
+                        <option>Mouse</option>
+                        <option>Impressora</option>
+                        <option>Monitor</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Número de patrimônio *</label>
+                    <input
+                        id="asset"
+                        required
+                        maxlength="30"
+                        placeholder="Ex.: PAT-001"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Marca</label>
+                    <input id="brand" maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Modelo</label>
+                    <input id="model" maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Localização</label>
+                    <input
+                        id="location"
+                        maxlength="70"
+                        placeholder="Ex.: Laboratório"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Situação *</label>
+
+                    <select id="status" required>
+                        <option>Disponível</option>
+                        <option>Em uso</option>
+                        <option>Em manutenção</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Estado de conservação</label>
+
+                    <select id="condition">
+                        <option>Bom</option>
+                        <option>Regular</option>
+                        <option>Ruim</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label>Observações</label>
+                    <textarea
+                        id="notes"
+                        maxlength="300"
+                        rows="3"
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <br>
+
+            <button
+                type="submit"
+                class="btn primary"
+                id="saveButton"
+            >
+                Salvar equipamento
+            </button>
+
+            <button
+                type="button"
+                class="btn secondary"
+                id="cancelButton"
+            >
+                Cancelar
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<!-- CONFIGURAÇÕES -->
+
+<section id="settings" class="page">
+
+    <h1>Dados e backup</h1>
+
+    <p class="subtitle">
+        Gerencie e proteja os dados do inventário.
+    </p>
+
+    <div class="panel">
+        <h3>Exportar inventário</h3>
+        <br>
+        <button class="btn primary" id="exportCSV">
+            Baixar arquivo CSV
+        </button>
+    </div>
+
+    <div class="panel">
+        <h3>Backup dos dados</h3>
+        <br>
+        <button class="btn primary" id="backupJSON">
+            Baixar backup JSON
+        </button>
+    </div>
+
+    <div class="panel">
+        <h3>Restaurar backup</h3>
+        <br>
+
+        <input type="file" id="importFile" accept=".json">
+        <br><br>
+
+        <button class="btn primary" id="restoreJSON">
+            Importar backup
+        </button>
+    </div>
+
+    <div class="panel">
+        <h3>Armazenamento</h3>
+        <br>
+        <p id="storageCount">0 registros salvos.</p>
+        <small>
+            Os dados ficam armazenados neste navegador.
+            Faça backups regularmente.
+        </small>
+    </div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+// ======================================
+// CONFIGURAÇÃO E ARMAZENAMENTO
+// ======================================
+
+const STORAGE_KEY = "escolaControlEquipamentosV1";
+
+let equipments = loadData();
+
+function loadData() {
+    try {
+        const data = JSON.parse(
+            localStorage.getItem(STORAGE_KEY) || "[]"
+        );
+
+        return Array.isArray(data) ? data : [];
+
+    } catch (error) {
+        return [];
+    }
+}
+
+function persistData() {
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(equipments)
+        );
+
+        renderAll();
+        return true;
+
+    } catch (error) {
+        showToast("Erro ao salvar. Verifique o armazenamento.");
+        return false;
+    }
+}
+
+function uid() {
+    return "EQ-" + Date.now().toString(36) +
+        Math.random().toString(36).slice(2, 7);
+}
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+// ======================================
+// NOTIFICAÇÕES
+// ======================================
+
+let toastTimer;
+
+function showToast(message) {
+    const toast = $("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+// ======================================
+// NAVEGAÇÃO
+// ======================================
+
+function navigate(page) {
+
+    document.querySelectorAll(".page").forEach(section => {
+        section.classList.remove("active");
+    });
+
+    $(page).classList.add("active");
+
+    document.querySelectorAll("[data-page]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.page === page
+        );
+    });
+
+    if (page === "dashboard") renderDashboard();
+    if (page === "inventory") renderInventory();
+}
+
+document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => {
+        navigate(button.dataset.page);
+    });
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+    button.addEventListener("click", () => {
+        resetForm();
+        navigate(button.dataset.go);
+    });
+});
+
+// ======================================
+// CADASTRO DE EQUIPAMENTOS
+// ======================================
+
+function resetForm() {
+
+    $("equipmentForm").reset();
+
+    $("editId").value = "";
+
+    $("formTitle").textContent =
+        "Cadastrar equipamento";
+
+    $("saveButton").textContent =
+        "Salvar equipamento";
+}
+
+$("cancelButton").addEventListener("click", () => {
+    resetForm();
+    navigate("inventory");
+});
+
+$("equipmentForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const form = $("equipmentForm");
+
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const id = $("editId").value;
+
+    const item = {
+
+        id: id || uid(),
+
+        name: $("name").value.trim(),
+
+        category: $("category").value,
+
+        asset: $("asset").value.trim(),
+
+        brand: $("brand").value.trim(),
+
+        model: $("model").value.trim(),
+
+        location: $("location").value.trim(),
+
+        status: $("status").value,
+
+        condition: $("condition").value,
+
+        notes: $("notes").value.trim(),
+
+        updatedAt: new Date().toISOString()
+
+    };
+
+    if (!item.name || !item.category || !item.asset) {
+        showToast("Preencha todos os campos obrigatórios.");
+        return;
+    }
+
+    // Verificar patrimônio duplicado
+
+    const duplicate = equipments.some(equipment =>
+        String(equipment.asset).toLowerCase() ===
+        item.asset.toLowerCase() &&
+        equipment.id !== id
+    );
+
+    if (duplicate) {
+        showToast("Este patrimônio já está cadastrado.");
+        $("asset").focus();
+        return;
+    }
+
+    const previousData = [...equipments];
+
+    if (id) {
+
+        const index = equipments.findIndex(
+            equipment => equipment.id === id
+        );
+
+        if (index === -1) {
+            showToast("Equipamento não encontrado.");
+            return;
+        }
+
+        item.createdAt =
+            equipments[index].createdAt || item.updatedAt;
+
+        equipments[index] = item;
+
+    } else {
+
+        item.createdAt = item.updatedAt;
+
+        equipments.unshift(item);
+    }
+
+    if (!persistData()) {
+        equipments = previousData;
+        return;
+    }
+
+    resetForm();
+
+    navigate("inventory");
+
+    showToast(
+        id
+            ? "Equipamento atualizado com sucesso!"
+            : "Equipamento cadastrado com sucesso!"
+    );
+
+});
+
+// ======================================
+// EDITAR EQUIPAMENTO
+// ======================================
+
+function editEquipment(id) {
+
+    const item = equipments.find(
+        equipment => equipment.id === id
+    );
+
+    if (!item) return;
+
+    $("editId").value = item.id;
+
+    $("name").value = item.name;
+    $("category").value = item.category;
+    $("asset").value = item.asset;
+    $("brand").value = item.brand || "";
+    $("model").value = item.model || "";
+    $("location").value = item.location || "";
+    $("status").value = item.status;
+    $("condition").value = item.condition || "Bom";
+    $("notes").value = item.notes || "";
+
+    $("formTitle").textContent = "Editar equipamento";
+
+    $("saveButton").textContent = "Salvar alterações";
+
+    navigate("register");
+}
+
+// ======================================
+// EXCLUIR EQUIPAMENTO
+// ======================================
+
+function deleteEquipment(id) {
+
+    const item = equipments.find(
+        equipment => equipment.id === id
+    );
+
+    if (!item) return;
+
+    const confirmation = confirm(
+        "Deseja realmente excluir " + item.name + "?"
+    );
+
+    if (!confirmation) return;
+
+    const previousData = [...equipments];
+
+    equipments = equipments.filter(
+        equipment => equipment.id !== id
+    );
+
+    if (!persistData()) {
+        equipments = previousData;
+        return;
+    }
+
+    showToast("Equipamento excluído com sucesso!");
+}
+
+// ======================================
+// SEGURANÇA NA EXIBIÇÃO DE TEXTO
+// ======================================
+
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(
+        /[&<>"']/g,
+        character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[character]
+    );
+}
+
+// ======================================
+// INVENTÁRIO E PESQUISA
+// ======================================
+
+function renderInventory() {
+
+    const query = $("search").value.toLowerCase().trim();
+
+    const category = $("filterCategory").value;
+
+    const status = $("filterStatus").value;
+
+    const filtered = equipments.filter(item => {
+
+        const text = [
+            item.name,
+            item.asset,
+            item.brand,
+            item.model,
+            item.location
+        ].join(" ").toLowerCase();
+
+        return (
+            (!query || text.includes(query)) &&
+            (!category || item.category === category) &&
+            (!status || item.status === status)
+        );
+
+    });
+
+    const tbody = $("equipmentList");
+
+    tbody.innerHTML = "";
+
+    filtered.forEach(item => {
+
+        const row = document.createElement("tr");
+
+        let badgeClass = "disponivel";
+
+        if (item.status === "Em uso") {
+            badgeClass = "emuso";
+        }
+
+        if (item.status === "Em manutenção") {
+            badgeClass = "manutencao";
+        }
+
+        row.innerHTML = `
+
+            <td>
+                <strong>${escapeHTML(item.name)}</strong>
+                <br>
+                <small>${escapeHTML(item.brand || "")}</small>
+            </td>
+
+            <td>${escapeHTML(item.asset)}</td>
+
+            <td>${escapeHTML(item.category)}</td>
+
+            <td>${escapeHTML(item.location || "Não informado")}</td>
+
+            <td>
+                <span class="badge ${badgeClass}">
+                    ${escapeHTML(item.status)}
+                </span>
+            </td>
+
+            <td>
+                <div class="actions">
+
+                    <button class="secondary" data-action="edit">
+                        ✎
+                    </button>
+
+                    <button class="danger" data-action="delete">
+                        ✕
+                    </button>
+
+                </div>
+            </td>
+        `;
+
+        row.querySelector('[data-action="edit"]')
+            .addEventListener("click", () => editEquipment(item.id));
+
+        row.querySelector('[data-action="delete"]')
+            .addEventListener("click", () => deleteEquipment(item.id));
+
+        tbody.appendChild(row);
+
+    });
+
+    $("emptyInventory").style.display =
+        filtered.length === 0 ? "block" : "none";
+}
+
+$("search").addEventListener("input", renderInventory);
+
+$("filterCategory").addEventListener("change", renderInventory);
+
+$("filterStatus").addEventListener("change", renderInventory);
+
+$("clearFilters").addEventListener("click", () => {
+
+    $("search").value = "";
+    $("filterCategory").value = "";
+    $("filterStatus").value = "";
+
+    renderInventory();
+
+});
+
+// ======================================
+// DASHBOARD
+// ======================================
+
+function renderDashboard() {
+
+    $("total").textContent = equipments.length;
+
+    $("available").textContent =
+        equipments.filter(e => e.status === "Disponível").length;
+
+    $("inUse").textContent =
+        equipments.filter(e => e.status === "Em uso").length;
+
+    $("maintenance").textContent =
+        equipments.filter(e => e.status === "Em manutenção").length;
+
+    const recent = equipments
+        .slice()
+        .sort((a, b) =>
+            (b.createdAt || "").localeCompare(a.createdAt || "")
+        )
+        .slice(0, 5);
+
+    $("recent").innerHTML = recent.length
+        ? recent.map(item => `
+            <div class="recent-item">
+                <strong>${escapeHTML(item.name)}</strong>
+                <br>
+                <small>
+                    ${escapeHTML(item.asset)} —
+                    ${escapeHTML(item.status)}
+                </small>
+            </div>
+        `).join("")
+        : '<div class="empty">Nenhum cadastro realizado.</div>';
+}
+
+function renderAll() {
+
+    renderDashboard();
+
+    renderInventory();
+
+    $("storageCount").textContent =
+        equipments.length + " registro(s) salvo(s).";
+}
+
+// ======================================
+// EXPORTAR CSV
+// ======================================
+
+function exportCSV() {
+
+    if (equipments.length === 0) {
+        showToast("Não existem equipamentos para exportar.");
+        return;
+    }
+
+    const headers = [
+        "Nome",
+        "Categoria",
+        "Patrimônio",
+        "Marca",
+        "Modelo",
+        "Localização",
+        "Situação",
+        "Conservação",
+        "Observações"
+    ];
+
+    const rows = equipments.map(item => [
+        item.name,
+        item.category,
+        item.asset,
+        item.brand,
+        item.model,
+        item.location,
+        item.status,
+        item.condition,
+        item.notes
+    ]);
+
+    const csvEscape = value =>
+        '"' + String(value ?? "").replace(/"/g, '""') + '"';
+
+    const content = "\uFEFF" +
+        [headers, ...rows]
+        .map(row => row.map(csvEscape).join(";"))
+        .join("\r\n");
+
+    downloadFile(
+        content,
+        "escola-control.csv",
+        "text/csv;charset=utf-8"
+    );
+
+    showToast("Inventário exportado!");
+}
+
+function downloadFile(content, filename, type) {
+
+    const blob = new Blob([content], { type });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = filename;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$("exportCSV").addEventListener("click", exportCSV);
+
+$("quickExport").addEventListener("click", exportCSV);
+
+// ======================================
+// BACKUP JSON
+// ======================================
+
+function backupJSON() {
+
+    const backup = {
+
+        app: "Escola Control",
+
+        version: 1,
+
+        exportedAt: new Date().toISOString(),
+
+        equipments: equipments
+
+    };
+
+    downloadFile(
+        JSON.stringify(backup, null, 2),
+        "escola-control-backup.json",
+        "application/json"
+    );
+
+    showToast("Backup realizado!");
+}
+
+$("backupJSON").addEventListener("click", backupJSON);
+
+// ======================================
+// RESTAURAR BACKUP
+// ======================================
+
+$("restoreJSON").addEventListener("click", () => {
+
+    const file = $("importFile").files[0];
+
+    if (!file) {
+        showToast("Selecione um arquivo JSON.");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+
+        try {
+
+            const backup = JSON.parse(reader.result);
+
+            const items = Array.isArray(backup)
+                ? backup
+                : backup.equipments;
+
+            if (!Array.isArray(items)) {
+                throw new Error("Formato inválido");
+            }
+
+            const valid = items.every(item =>
+                item &&
+                typeof item.id === "string" &&
+                typeof item.name === "string" &&
+                typeof item.asset === "string" &&
+                typeof item.category === "string" &&
+                ["Disponível", "Em uso", "Em manutenção"]
+                    .includes(item.status)
+            );
+
+            if (!valid) {
+                throw new Error("Dados inválidos");
+            }
+
+            const assets = items.map(
+                item => item.asset.toLowerCase()
+            );
+
+            if (new Set(assets).size !== assets.length) {
+                showToast("O backup possui patrimônios duplicados.");
+                return;
+            }
+
+            if (!confirm(
+                "Deseja restaurar o backup? Os dados atuais serão substituídos."
+            )) {
+                return;
+            }
+
+            const previousData = equipments;
+
+            equipments = items;
+
+            if (!persistData()) {
+                equipments = previousData;
+                return;
+            }
+
+            $("importFile").value = "";
+
+            showToast("Backup restaurado com sucesso!");
+
+        } catch (error) {
+
+            showToast("Arquivo inválido ou incompatível.");
+
+        }
+
+    };
+
+    reader.readAsText(file);
+
+});
+
+// ======================================
+// INICIALIZAÇÃO
+// ======================================
+
+renderAll();
+
+</script>
+
+</body>
+</html>
